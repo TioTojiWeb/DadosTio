@@ -4,12 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toji's Dice Game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+    
     <style>
         /* ==========================================================================
            1. CONFIGURACIÓN GLOBAL Y FONDO DE LA PÁGINA
            ========================================================================== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
         body {
-            font-family: 'Impact', 'Arial Black', sans-serif;
+            font-family: 'Rajdhani', sans-serif;
             background-color: #0b1a14; 
             background-image: url('image_27b01f.png');
             background-size: cover;
@@ -22,31 +32,39 @@
             min-height: 100vh;
             margin: 0;
             padding: 20px;
-            box-sizing: border-box;
             color: #ffffff;
+            image-rendering: high-quality;
         }
 
         /* ==========================================================================
-           2. CONTENEDOR PRINCIPAL DEL JUEGO (GAME INTERFACE)
+           2. CONTENEDOR PRINCIPAL DEL JUEGO (GAME INTERFACE + EFECTO CRISTAL HD)
            ========================================================================== */
         .game-container {
             text-align: center;
             background: linear-gradient(135deg, rgba(16, 38, 28, 0.95), rgba(8, 20, 15, 0.95));
             padding: 30px;
             border-radius: 25px;
-            box-shadow: 0 0 25px rgba(46, 204, 113, 0.3), inset 0 0 15px rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            /* Triple capa de sombra para un efecto de profundidad hiperrealista */
+            box-shadow: 
+                0 20px 50px rgba(0, 0, 0, 0.8),
+                0 0 30px rgba(46, 204, 113, 0.2),
+                inset 0 1px 1px rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 2px solid #2ecc71;
             max-width: 400px;
             width: 100%;
             transition: all 0.3s ease;
-            box-sizing: border-box;
         }
 
         h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
             color: #2ecc71;
-            text-shadow: 0 0 12px rgba(46, 204, 113, 0.6);
+            text-shadow: 
+                0 0 4px rgba(46, 204, 113, 0.3),
+                0 0 12px rgba(46, 204, 113, 0.6),
+                0 0 30px rgba(46, 204, 113, 0.2);
             font-size: 1.8rem;
             margin-top: 0;
             margin-bottom: 20px;
@@ -67,6 +85,7 @@
         .custom-select {
             background-color: #11251c;
             color: #2ecc71;
+            font-family: 'Orbitron', sans-serif;
             font-size: 1.1rem;
             font-weight: bold;
             padding: 10px 20px;
@@ -76,14 +95,14 @@
             outline: none;
             width: 160px;
             text-align: center;
-            box-shadow: 0 0 10px rgba(46, 204, 113, 0.2);
-            font-family: inherit;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
             letter-spacing: 1px;
-            transition: background-color 0.2s, box-shadow 0.2s;
+            transition: background-color 0.2s, box-shadow 0.2s, border-color 0.2s;
         }
 
-        .custom-select:hover {
+        .custom-select:hover, .custom-select:focus {
             background-color: #163024;
+            border-color: #00ff66;
             box-shadow: 0 0 15px rgba(46, 204, 113, 0.4);
         }
 
@@ -112,69 +131,68 @@
         }
 
         .roll-status {
-            font-size: 0.9rem; 
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem; 
             font-weight: bold;
             color: #3498db;
             text-shadow: 0 0 10px rgba(52, 152, 219, 0.9);
             margin-bottom: 8px;
             opacity: 0; 
             height: 18px;
-            transition: opacity 0.2s ease;
             letter-spacing: 1px;
         }
 
         .roll-status.active {
             opacity: 1;
-            animation: parpadeo 0.4s infinite alternate;
+            animation: parpadeo 0.4s infinite alternate ease-in-out;
         }
 
         .dice {
-            font-size: 3.5rem; 
-            width: 90px;
-            height: 90px;
+            font-size: 3.8rem; 
+            width: 92px;
+            height: 92px;
             display: flex;
             justify-content: center;
             align-items: center;
             border: 5px solid #ffffff; 
             border-radius: 20px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-            box-sizing: border-box;
-            transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+            background-clip: padding-box;
+            transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
         }
 
         .dice.spinning {
-            animation: giro-loco 0.25s infinite linear;
+            animation: giro-loco 0.22s infinite linear;
         }
 
         /* ==========================================================================
-           5. ESTILOS NEÓN PARA CADA COLOR INDIVIDUAL DE DADO
+           5. ESTILOS NEÓN HD PARA CADA COLOR INDIVIDUAL DE DADO
            ========================================================================== */
-        .dice.azul { background-color: #2980b9; color: #ffffff; box-shadow: 0 0 15px rgba(41, 128, 185, 0.7), 0 8px 20px rgba(0, 0, 0, 0.5); }
-        .dice.amarillo { background-color: #f1c40f; color: #ffffff; box-shadow: 0 0 15px rgba(241, 196, 15, 0.7), 0 8px 20px rgba(0, 0, 0, 0.5); }
-        .dice.verde { background-color: #27ae60; color: #ffffff; box-shadow: 0 0 15px rgba(39, 174, 96, 0.7), 0 8px 20px rgba(0, 0, 0, 0.5); }
-        .dice.morado { background-color: #8e44ad; color: #ffffff; box-shadow: 0 0 15px rgba(142, 68, 173, 0.7), 0 8px 20px rgba(0, 0, 0, 0.5); }
-        .dice.naranja { background-color: #d35400; color: #ffffff; box-shadow: 0 0 15px rgba(211, 84, 0, 0.7), 0 8px 20px rgba(0, 0, 0, 0.5); }
-        .dice.rojo { background-color: #c0392b; color: #ffffff; box-shadow: 0 0 15px rgba(192, 57, 43, 0.7), 0 8px 20px rgba(0, 0, 0, 0.5); }
+        .dice.azul { background-color: #2980b9; color: #ffffff; box-shadow: 0 0 5px rgba(41,128,185,0.5), 0 0 20px rgba(41,128,185,0.4), 0 8px 20px rgba(0, 0, 0, 0.6); }
+        .dice.amarillo { background-color: #f1c40f; color: #ffffff; box-shadow: 0 0 5px rgba(241,196,15,0.5), 0 0 20px rgba(241,196,15,0.4), 0 8px 20px rgba(0, 0, 0, 0.6); }
+        .dice.verde { background-color: #27ae60; color: #ffffff; box-shadow: 0 0 5px rgba(39,174,96,0.5), 0 0 20px rgba(39,174,96,0.4), 0 8px 20px rgba(0, 0, 0, 0.6); }
+        .dice.morado { background-color: #8e44ad; color: #ffffff; box-shadow: 0 0 5px rgba(142,68,173,0.5), 0 0 20px rgba(142,68,173,0.4), 0 8px 20px rgba(0, 0, 0, 0.6); }
+        .dice.naranja { background-color: #d35400; color: #ffffff; box-shadow: 0 0 5px rgba(211,84,0,0.5), 0 0 20px rgba(211,84,0,0.4), 0 8px 20px rgba(0, 0, 0, 0.6); }
+        .dice.rojo { background-color: #c0392b; color: #ffffff; box-shadow: 0 0 5px rgba(192,57,43,0.5), 0 0 20px rgba(192,57,43,0.4), 0 8px 20px rgba(0, 0, 0, 0.6); }
 
         /* ==========================================================================
            6. SECCIÓN DE LOGROS / COMBO TITLES
            ========================================================================== */
         .achievement-text {
+            font-family: 'Orbitron', sans-serif;
             font-size: 1.1rem;
-            font-weight: bold;
+            font-weight: 800;
             color: #f1c40f;
             text-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
             margin-top: 20px;
             margin-bottom: 20px;
             min-height: 24px;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
             text-transform: uppercase;
-            transition: all 0.3s ease;
             width: 100%;
         }
 
         .achievement-pop {
-            animation: pop-efecto 0.3s ease-out forwards;
+            animation: pop-efecto 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
         /* ==========================================================================
@@ -183,33 +201,38 @@
         button {
             background: linear-gradient(90deg, #2ecc71, #27ae60);
             color: #ffffff;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
             border: none;
-            padding: 12px 35px;
+            padding: 13px 38px;
             font-size: 1.2rem;
-            border-radius: 12px;
+            border-radius: 14px;
             cursor: pointer;
             margin-top: 5px;
             margin-bottom: 10px;
-            font-weight: bold;
-            font-family: inherit;
-            box-shadow: 0 0 15px rgba(46, 204, 113, 0.4);
-            transition: all 0.2s ease;
-            animation: pulso-boton 2s infinite;
+            box-shadow: 0 0 15px rgba(46, 204, 113, 0.4), 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: pulso-boton 2.5s infinite ease-in-out;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
         button:hover {
             background: linear-gradient(90deg, #27ae60, #219653);
-            box-shadow: 0 0 25px rgba(46, 204, 113, 0.8);
+            box-shadow: 0 0 25px rgba(46, 204, 113, 0.8), 0 8px 20px rgba(0, 0, 0, 0.4);
             transform: translateY(-2px);
         }
 
+        button:active {
+            transform: translateY(1px);
+        }
+
         button:disabled {
-            background: #555555 !important;
+            background: #222222 !important;
+            color: #666666 !important;
             box-shadow: none !important;
             cursor: not-allowed;
-            opacity: 0.6;
+            opacity: 0.5;
             animation: none;
             transform: none;
         }
@@ -218,16 +241,18 @@
            8. TABLERO DE ESTADÍSTICAS ABAJO (COLOR TRACKER)
            ========================================================================== */
         .stats-container {
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 2px dashed rgba(46, 204, 113, 0.3);
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(46, 204, 113, 0.3);
             text-align: left;
             width: 100%;
         }
 
         .stats-container h3 {
-            margin: 0 0 15px 0;
-            font-size: 1.2rem;
+            font-family: 'Orbitron', sans-serif;
+            margin: 0 0 18px 0;
+            font-size: 1.1rem;
+            font-weight: 800;
             color: #2ecc71;
             text-align: center;
             text-shadow: 0 0 8px rgba(46, 204, 113, 0.4);
@@ -238,33 +263,37 @@
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            gap: 12px;
             width: 100%;
         }
 
         .stat-item {
             background-color: rgba(17, 37, 28, 0.6);
-            padding: 8px 15px;
-            border-radius: 8px;
-            font-size: 0.95rem;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-size: 1.02rem;
+            font-weight: 700;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.03);
             box-sizing: border-box;
+            letter-spacing: 0.5px;
         }
 
-        .stat-item.s-azul { border-left: 5px solid #2980b9; }
-        .stat-item.s-amarillo { border-left: 5px solid #f1c40f; }
-        .stat-item.s-verde { border-left: 5px solid #27ae60; }
-        .stat-item.s-morado { border-left: 5px solid #8e44ad; }
-        .stat-item.s-naranja { border-left: 5px solid #d35400; }
-        .stat-item.s-rojo { border-left: 5px solid #c0392b; }
+        .stat-item.s-azul { border-left: 4px solid #2980b9; }
+        .stat-item.s-amarillo { border-left: 4px solid #f1c40f; }
+        .stat-item.s-verde { border-left: 4px solid #27ae60; }
+        .stat-item.s-morado { border-left: 4px solid #8e44ad; }
+        .stat-item.s-naranja { border-left: 4px solid #d35400; }
+        .stat-item.s-rojo { border-left: 4px solid #c0392b; }
 
         .stat-item span {
+            font-family: 'Orbitron', sans-serif;
             color: #2ecc71;
             font-size: 1.1rem;
-            font-weight: bold;
+            font-weight: 900;
+            text-shadow: 0 0 5px rgba(46, 204, 113, 0.4);
         }
 
         /* ==========================================================================
@@ -272,25 +301,61 @@
            ========================================================================== */
         @keyframes giro-loco {
             0% { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(180deg) scale(1.1); }
+            50% { transform: rotate(180deg) scale(1.06); }
             100% { transform: rotate(360deg) scale(1); }
         }
 
         @keyframes parpadeo {
-            from { opacity: 0.3; }
+            from { opacity: 0.4; }
             to { opacity: 1; }
         }
 
         @keyframes pulso-boton {
-            0% { box-shadow: 0 0 15px rgba(46, 204, 113, 0.4); }
-            50% { box-shadow: 0 0 25px rgba(46, 204, 113, 0.8); }
-            100% { box-shadow: 0 0 15px rgba(46, 204, 113, 0.4); }
+            0% { box-shadow: 0 0 15px rgba(46, 204, 113, 0.3), 0 5px 15px rgba(0, 0, 0, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(46, 204, 113, 0.7), 0 5px 15px rgba(0, 0, 0, 0.3); }
+            100% { box-shadow: 0 0 15px rgba(46, 204, 113, 0.3), 0 5px 15px rgba(0, 0, 0, 0.3); }
         }
 
         @keyframes pop-efecto {
-            0% { transform: scale(0.8); opacity: 0; }
-            50% { transform: scale(1.15); }
+            0% { transform: scale(0.7); opacity: 0; filter: blur(4px); }
+            50% { transform: scale(1.1); filter: blur(0px); }
             100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* ==========================================================================
+           10. ANIMACIONES DE IMPACTO (SCREEN SHAKE & DESTELLO CRÍTICO)
+           ========================================================================== */
+        @keyframes terremoto {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(0px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(2px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(2px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(0deg); }
+        }
+
+        @keyframes destello-critico {
+            0% { background-color: rgba(255, 255, 255, 0); }
+            10% { background-color: rgba(46, 204, 113, 0.35); } /* Destello verde esmeralda */
+            100% { background-color: rgba(255, 255, 255, 0); }
+        }
+
+        .shake-efecto {
+            animation: terremoto 0.3s ease-in-out forwards;
+        }
+
+        .flash-efecto::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 9999;
+            pointer-events: none;
+            animation: destello-critico 0.4s ease-out forwards;
         }
     </style>
 </head>
