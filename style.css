@@ -28,13 +28,13 @@ h1 {
     text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
-/* Contenedores para alinear el ROLLING... arriba de cada dado */
+/* Ampliamos un poquito el espacio para que el texto "ROLLING... 3s" entre cómodo */
 .dice-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
+    gap: 30px; 
     margin: 20px auto;
-    max-width: 260px;
+    max-width: 300px; 
 }
 
 .dice-wrapper {
@@ -44,18 +44,17 @@ h1 {
     position: relative;
 }
 
-/* El texto estilo image_15fa04.png */
 .roll-status {
-    font-size: 0.9rem;
+    font-size: 0.95rem; /* Letra un poquito más clara */
     font-weight: bold;
     color: #3498db;
     text-shadow: 0 0 8px rgba(52, 152, 219, 0.8);
     margin-bottom: 8px;
-    opacity: 0; /* Oculto al inicio */
+    opacity: 0; 
     transition: opacity 0.2s;
+    white-space: nowrap; /* Evita que el texto se parta en dos líneas */
 }
 
-/* Clase para mostrar el texto cuando se rueda */
 .roll-status.active {
     opacity: 1;
     animation: parpadeo 0.5s infinite alternate;
@@ -75,7 +74,7 @@ h1 {
     box-sizing: border-box;
 }
 
-/* --- ANIMACIÓN DE GIRO DE 2 SEGUNDOS --- */
+/* Animación de giro */
 .dice.spinning {
     animation: giro-loco 0.3s infinite linear;
 }
@@ -87,11 +86,11 @@ h1 {
 }
 
 @keyframes parpadeo {
-    from { opacity: 0.4; }
+    from { opacity: 0.5; }
     to { opacity: 1; }
 }
 
-/* Paleta de Colores */
+/* Colores */
 .azul { background-color: #3498db; color: white; }
 .amarillo { background-color: #f1c40f; color: white; }
 .verde { background-color: #2ecc71; color: white; }
