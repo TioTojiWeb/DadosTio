@@ -14,7 +14,7 @@
            ========================================================================== */
         *, *::before, *::after {
             box-sizing: border-box;
-            -webkit-font-smoothing: antialiased; /* Suavizado de fuentes en Mac/iOS */
+            -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
 
@@ -33,7 +33,6 @@
             margin: 0;
             padding: 24px;
             color: #ffffff;
-            /* Fuerza al navegador a usar el motor de renderizado de más alta calidad */
             image-rendering: high-quality;
         }
 
@@ -45,11 +44,10 @@
             background: linear-gradient(135deg, rgba(10, 26, 19, 0.93), rgba(4, 12, 9, 0.97));
             padding: 35px 25px;
             border-radius: 24px;
-            /* Triple capa de sombra para un efecto de profundidad hiperrealista */
             box-shadow: 
                 0 20px 50px rgba(0, 0, 0, 0.8),
                 0 0 30px rgba(46, 204, 113, 0.15),
-                inset 0 1px 1px rgba(255, 255, 255, 0.1); /* Reflejo de cristal en el borde */
+                inset 0 1px 1px rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1.5px solid rgba(46, 204, 113, 0.4);
@@ -61,8 +59,7 @@
         h1 {
             font-family: 'Orbitron', sans-serif;
             font-weight: 900;
-            color: #00ff66; /* Verde Neón Puro */
-            /* Efecto Cyberpunk nítido */
+            color: #00ff66; 
             text-shadow: 
                 0 0 4px rgba(0, 255, 102, 0.3),
                 0 0 12px rgba(0, 255, 102, 0.5),
@@ -147,7 +144,6 @@
             animation: parpadeo-hd 0.5s infinite alternate ease-in-out;
         }
 
-        /* Diseño de los Dados de Toji en Alta Resolución */
         .dice {
             font-size: 3.8rem; 
             width: 95px;
@@ -159,17 +155,15 @@
             border-radius: 22px;
             background-clip: padding-box;
             box-sizing: border-box;
-            /* Suaviza los movimientos de escala en pantallas de 144Hz o más */
             transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
         }
 
-        /* Animación ultra fluida */
         .dice.spinning {
             animation: giro-ultra-fluido 0.22s infinite linear;
         }
 
         /* ==========================================================================
-           5. PALETA NEÓN HD (Doble capa de brillo)
+           5. PALETA NEÓN HD
            ========================================================================== */
         .dice.azul { background-color: #1a73e8; color: #ffffff; box-shadow: 0 0 5px rgba(26,115,232,0.5), 0 0 20px rgba(26,115,232,0.4), 0 10px 20px rgba(0,0,0,0.5); }
         .dice.amarillo { background-color: #ffcc00; color: #ffffff; box-shadow: 0 0 5px rgba(255,204,0,0.5), 0 0 20px rgba(255,204,0,0.4), 0 10px 20px rgba(0,0,0,0.5); }
@@ -270,3 +264,34 @@
             gap: 12px;
             width: 100%;
         }
+
+        .stat-item {
+            background-color: rgba(5, 15, 10, 0.6);
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            box-sizing: border-box;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-item.s-azul { border-left: 4px solid #1a73e8; }
+        .stat-item.s-amarillo { border-left: 4px solid #ffcc00; }
+        .stat-item.s-verde { border-left: 4px solid #00cc66; }
+        .stat-item.s-morado { border-left: 4px solid #b300ff; }
+        .stat-item.s-naranja { border-left: 4px solid #ff6600; }
+        .stat-item.s-rojo { border-left: 4px solid #ff3333; }
+
+        .stat-item span {
+            font-family: 'Orbitron', sans-serif;
+            color: #00ff66;
+            font-size: 1.1rem;
+            font-weight: 900;
+            text-shadow: 0 0 5px rgba(0, 255, 102, 0.4);
+        }
+
+        /* =
