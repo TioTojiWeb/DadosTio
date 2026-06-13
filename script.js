@@ -10,6 +10,9 @@ const estadisticas = {
     rojo: 0
 };
 
+// Cargamos un sonido público de dados rodando (puedes cambiar este link si tienes tu propio audio)
+const sonidoDados = new Audio('https://assets.mixkit.co/active_storage/sfx/2048/2048-84.wav');
+
 function actualizarCantidadDados() {
     const cantidadSelect = parseInt(selector.value);
     for (let i = 1; i <= 4; i++) {
@@ -32,7 +35,13 @@ document.getElementById('roll-btn').addEventListener('click', function() {
     selector.disabled = true;
     button.textContent = 'Rolling!';
 
-    let tiempoRestante = 1; // ¡Ajustado a 1 segundo exacto!
+    // --- REPRODUCIR SONIDO ---
+    sonidoDados.currentTime = 0; // Reinicia el audio si se vuelve a pulsar rápido
+    sonidoDados.play().catch(error => {
+        console.log("El navegador bloqueó el audio hasta que el usuario interactúe con la página.");
+    });
+
+    let tiempoRestante = 1; // 1 segundo exacto de duración
 
     for (let i = 1; i <= cantidadDadosActivos; i++) {
         const statusElement = document.getElementById(`status-${i}`);
@@ -70,7 +79,6 @@ document.getElementById('roll-btn').addEventListener('click', function() {
                 const colorFinal = colores[Math.floor(Math.random() * colores.length)];
                 diceElement.className = 'dice ' + colorFinal;
                 
-                // Suma inmediata al contador de color
                 estadisticas[colorFinal]++;
                 document.getElementById(`count-${colorFinal}`).textContent = estadisticas[colorFinal];
                 
@@ -82,7 +90,7 @@ document.getElementById('roll-btn').addEventListener('click', function() {
             selector.disabled = false;
             button.textContent = 'Roll Dice';
         }
-    }, 1000); // Frena justo al cumplir el primer segundo
+    }, 1000);
 });
 
 actualizarCantidadDados();
