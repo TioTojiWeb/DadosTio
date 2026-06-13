@@ -1,179 +1,142 @@
-/* ==========================================================================
-   1. CONFIGURACIÓN GLOBAL Y FONDO DE LA PÁGINA
-   ========================================================================== */
-body {
-    font-family: 'Impact', 'Arial Black', sans-serif;
-    background-color: #0b1a14; 
-    /* Imagen de fondo de Toji configurada para cubrir toda la pantalla */
-    background-image: url('image_27b01f.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    padding: 20px;
-    box-sizing: border-box;
-    color: #ffffff;
+const colores = ['azul', 'amarillo', 'verde', 'morado', 'naranja', 'rojo'];
+const selector = document.getElementById('dice-selector');
+const achievementBox = document.getElementById('achievement-box');
+
+const estadisticas = {
+    azul: 0,
+    amarillo: 0,
+    verde: 0,
+    morado: 0,
+    naranja: 0,
+    rojo: 0
+};
+
+const sonidoDadosReales = new Audio('dados.mp3');
+
+function actualizarCantidadDados() {
+    const cantidadSelect = parseInt(selector.value);
+    for (let i = 1; i <= 4; i++) {
+        const wrapper = document.getElementById(`wrapper-${i}`);
+        if (i <= cantidadSelect) {
+            wrapper.classList.remove('hidden');
+        } else {
+            wrapper.classList.add('hidden');
+        }
+    }
 }
 
-/* ==========================================================================
-   2. CONTENEDOR PRINCIPAL DEL JUEGO (GAME INTERFACE)
-   ========================================================================== */
-.game-container {
-    text-align: center;
-    background: linear-gradient(135deg, rgba(16, 38, 28, 0.95), rgba(8, 20, 15, 0.95));
-    padding: 30px;
-    border-radius: 25px;
-    /* Resplandor neón verde principal */
-    box-shadow: 0 0 25px rgba(46, 204, 113, 0.3), inset 0 0 15px rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 2px solid #2ecc71;
-    max-width: 400px;
-    width: 100%;
-    transition: all 0.3s ease;
-    box-sizing: border-box;
-}
+selector.addEventListener('change', actualizarCantidadDados);
 
-/* Título principal del juego */
-h1 {
-    color: #2ecc71;
-    text-shadow: 0 0 12px rgba(46, 204, 113, 0.6);
-    font-size: 1.8rem;
-    margin-top: 0;
-    margin-bottom: 20px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
+document.getElementById('roll-btn').addEventListener('click', function() {
+    const button = document.getElementById('roll-btn');
+    const cantidadDadosActivos = parseInt(selector.value);
+    
+    button.disabled = true;
+    selector.disabled = true;
+    button.textContent = 'Rolling!';
+    
+    achievementBox.textContent = "Good Luck...";
+    achievementBox.style.color = "#aaa";
+    achievementBox.style.textShadow = "none";
+    achievementBox.classList.remove('achievement-pop');
 
-/* ==========================================================================
-   3. MENU DESPLEGABLE (DICE SELECTOR)
-   ========================================================================== */
-.selector-container {
-    margin-bottom: 25px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
+    sonidoDadosReales.currentTime = 0; 
+    sonidoDadosReales.play().catch(error => {
+        console.log("Audio play blocked");
+    });
 
-.custom-select {
-    background-color: #11251c;
-    color: #2ecc71;
-    font-size: 1.1rem;
-    font-weight: bold;
-    padding: 10px 20px;
-    border: 2px solid #2ecc71;
-    border-radius: 12px;
-    cursor: pointer;
-    outline: none;
-    width: 160px;
-    text-align: center;
-    box-shadow: 0 0 10px rgba(46, 204, 113, 0.2);
-    font-family: inherit;
-    letter-spacing: 1px;
-    transition: background-color 0.2s, box-shadow 0.2s;
-}
+    let tiempoRestante = 1; 
 
-.custom-select:hover {
-    background-color: #163024;
-    box-shadow: 0 0 15px rgba(46, 204, 113, 0.4);
-}
+    for (let i = 1; i <= cantidadDadosActivos; i++) {
+        const statusElement = document.getElementById(`status-${i}`);
+        statusElement.textContent = `ROLLING... ${tiempoRestante}s`;
+        statusElement.classList.add('active');
+        document.getElementById(`dice-${i}`).classList.add('spinning');
+    }
 
-/* ==========================================================================
-   4. ZONA DE DADOS Y ANIMACIONES (DICE GRID)
-   ========================================================================== */
-.dice-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px; 
-    margin: 20px auto;
-    width: 100%;
-}
+    const fiestaColores = setInterval(() => {
+        for (let i = 1; i <= cantidadDadosActivos; i++) {
+            const diceElement = document.getElementById(`dice-${i}`);
+            const colorAleatorio = colores[Math.floor(Math.random() * colores.length)];
+            diceElement.className = 'dice spinning ' + colorAleatorio;
+        }
+    }, 70);
 
-.dice-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    transition: transform 0.2s ease;
-}
+    const cuentaRegresiva = setInterval(() => {
+        tiempoRestante--;
+        
+        if (tiempoRestante > 0) {
+            for (let i = 1; i <= cantidadDadosActivos; i++) {
+                document.getElementById(`status-${i}`).textContent = `ROLLING... ${tiempoRestante}s`;
+            }
+        } else {
+            clearInterval(cuentaRegresiva);
+            clearInterval(fiestaColores);
 
-/* Clase dinámica que usa JS para ocultar dados */
-.dice-wrapper.hidden {
-    display: none !important;
-}
+            let coloresObtenidos = [];
 
-/* Estado del texto ROLLING... arriba del dado */
-.roll-status {
-    font-size: 0.9rem; 
-    font-weight: bold;
-    color: #3498db;
-    text-shadow: 0 0 10px rgba(52, 152, 219, 0.9);
-    margin-bottom: 8px;
-    opacity: 0; 
-    height: 18px;
-    transition: opacity 0.2s ease;
-    letter-spacing: 1px;
-}
+            for (let i = 1; i <= cantidadDadosActivos; i++) {
+                const diceElement = document.getElementById(`dice-${i}`);
+                
+                diceElement.classList.remove('spinning');
+                document.getElementById(`status-${i}`).classList.remove('active');
+                
+                const colorFinal = colores[Math.floor(Math.random() * colores.length)];
+                diceElement.className = 'dice ' + colorFinal;
+                
+                coloresObtenidos.push(colorFinal);
+                
+                estadisticas[colorFinal]++;
+                document.getElementById(`count-${colorFinal}`).textContent = estadisticas[colorFinal];
+                
+                diceElement.style.transform = 'scale(1.12)';
+                setTimeout(() => { diceElement.style.transform = 'scale(1)'; }, 150);
+            }
 
-.roll-status.active {
-    opacity: 1;
-    animation: parpadeo 0.4s infinite alternate;
-}
+            let conteoTirada = {};
+            coloresObtenidos.forEach(c => { conteoTirada[c] = (conteoTirada[c] || 0) + 1; });
+            
+            let maxRepetidos = Math.max(...Object.values(conteoTirada));
+            let coloresDiferentes = Object.keys(conteoTirada).length;
 
-/* Estructura base de los dados de Toji */
-.dice {
-    font-size: 3.5rem; 
-    width: 90px;
-    height: 90px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 5px solid #ffffff; 
-    border-radius: 20px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-    box-sizing: border-box;
-    transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
-}
+            let textoLogro = "Just Ordinary... 🎲";
+            let colorLogro = "#e74c3c"; 
+            let glowLogro = "rgba(231, 76, 60, 0.5)";
 
-/* Activación del giro loco de 1 segundo */
-.dice.spinning {
-    animation: giro-loco 0.25s infinite linear;
-}
+            if (cantidadDadosActivos === 4 && coloresDiferentes === 4) {
+                textoLogro = "Perfect Rainbow! 🌈";
+                colorLogro = "#3498db";
+                glowLogro = "rgba(52, 152, 219, 0.8)";
+            } else if (maxRepetidos === 4) {
+                textoLogro = "Quadruple Threat! 👑";
+                colorLogro = "#f1c40f"; 
+                glowLogro = "rgba(241, 196, 15, 0.9)";
+            } else if (maxRepetidos === 3) {
+                textoLogro = "Triple Luck! 🔥";
+                colorLogro = "#e67e22"; 
+                glowLogro = "rgba(230, 126, 34, 0.8)";
+            } else if (maxRepetidos === 2) {
+                textoLogro = "Lucky Pair! 🍀";
+                colorLogro = "#2ecc71"; 
+                glowLogro = "rgba(46, 204, 113, 0.8)";
+            }
 
-/* ==========================================================================
-   5. ESTILOS NEÓN PARA CADA COLOR INDIVIDUAL DE DADO
-   ========================================================================== */
-.dice.azul {
-    background-color: #2980b9;
-    color: #ffffff;
-    box-shadow: 0 0 15px rgba(41, 128, 185, 0.7), 0 8px 20px rgba(0, 0, 0, 0.5);
-}
+            if (cantidadDadosActivos === 1) {
+                textoLogro = "Single Roll! 🎯";
+                colorLogro = "#9b59b6";
+                glowLogro = "rgba(155, 89, 182, 0.6)";
+            }
 
-.dice.amarillo {
-    background-color: #f1c40f;
-    color: #ffffff;
-    box-shadow: 0 0 15px rgba(241, 196, 15, 0.7), 0 8px 20px rgba(0, 0, 0, 0.5);
-}
+            achievementBox.textContent = textoLogro;
+            achievementBox.style.color = colorLogro;
+            achievementBox.style.textShadow = `0 0 12px ${glowLogro}`;
+            achievementBox.classList.add('achievement-pop');
 
-.dice.verde {
-    background-color: #27ae60;
-    color: #ffffff;
-    box-shadow: 0 0 15px rgba(39, 174, 96, 0.7), 0 8px 20px rgba(0, 0, 0, 0.5);
-}
+            button.disabled = false;
+            selector.disabled = false;
+            button.textContent = 'Roll Dice';
+        }
+    }, 1000); 
+});
 
-.dice.morado {
-    background-color: #8e44ad;
-    color: #ffffff;
-    box-shadow: 0 0 15px rgba(142, 68, 173, 0.7), 0 8px 20px rgba(0, 0, 0, 0.5);
-}
-
-.dice.naranja {
-    background-color: #d35400;
-    color: #ffffff;
-    box-shadow: 0 0 15
+actualizarCantidadDados();
