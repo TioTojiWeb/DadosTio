@@ -10,8 +10,8 @@ const estadisticas = {
     rojo: 0
 };
 
-// Enlace estable con sonido real de dados rodando y chocando
-const sonidoDadosReales = new Audio('https://ia802606.us.archive.org/24/items/dice-roll-1/dice-roll-1.mp3');
+// LLAMAMOS AL ARCHIVO LOCAL QUE SUBISTE A TU GITHUB (Carga instantánea)
+const sonidoDadosReales = new Audio('dados.mp3');
 
 function actualizarCantidadDados() {
     const cantidadSelect = parseInt(selector.value);
@@ -35,10 +35,10 @@ document.getElementById('roll-btn').addEventListener('click', function() {
     selector.disabled = true;
     button.textContent = 'Rolling!';
 
-    // --- REPRODUCIR SONIDO DE DADOS REALES ---
-    sonidoDadosReales.currentTime = 0; // Reinicia el audio si se tira seguido
+    // --- REPRODUCIR SONIDO DESDE TU PROPIO GITHUB ---
+    sonidoDadosReales.currentTime = 0; 
     sonidoDadosReales.play().catch(error => {
-        console.log("El navegador requiere un clic previo en la pantalla para activar el audio.");
+        console.log("El navegador bloqueó el audio. Haz un clic en la pantalla antes de girar.");
     });
 
     let tiempoRestante = 1; 
