@@ -1,7 +1,6 @@
 const colores = ['azul', 'amarillo', 'verde', 'morado', 'naranja', 'rojo'];
 const selector = document.getElementById('dice-selector');
 
-// Objeto para guardar el conteo total de cada color
 const estadisticas = {
     azul: 0,
     amarillo: 0,
@@ -31,11 +30,10 @@ document.getElementById('roll-btn').addEventListener('click', function() {
     
     button.disabled = true;
     selector.disabled = true;
-    button.textContent = '¡Girando!';
+    button.textContent = 'Rolling!';
 
-    let tiempoRestante = 2; // Sazón calibrado a 2 segundos
+    let tiempoRestante = 2; // Manteniendo tus 2 segundos de animación
 
-    // 1. Iniciamos los textos y la animación en los dados activos
     for (let i = 1; i <= cantidadDadosActivos; i++) {
         const statusElement = document.getElementById(`status-${i}`);
         statusElement.textContent = `ROLLING... ${tiempoRestante}s`;
@@ -44,7 +42,6 @@ document.getElementById('roll-btn').addEventListener('click', function() {
         document.getElementById(`dice-${i}`).classList.add('spinning');
     }
 
-    // 2. Fiesta rápida de colores cada 70ms mientras gira
     const fiestaColores = setInterval(() => {
         for (let i = 1; i <= cantidadDadosActivos; i++) {
             const diceElement = document.getElementById(`dice-${i}`);
@@ -53,7 +50,6 @@ document.getElementById('roll-btn').addEventListener('click', function() {
         }
     }, 70);
 
-    // 3. Cuenta regresiva que corre segundo a segundo
     const cuentaRegresiva = setInterval(() => {
         tiempoRestante--;
         
@@ -62,11 +58,9 @@ document.getElementById('roll-btn').addEventListener('click', function() {
                 document.getElementById(`status-${i}`).textContent = `ROLLING... ${tiempoRestante}s`;
             }
         } else {
-            // Cuando llega a 0 (a los 2 segundos exactos) se detiene todo
             clearInterval(cuentaRegresiva);
             clearInterval(fiestaColores);
 
-            // 4. Frenazo en seco y guardado de estadísticas
             for (let i = 1; i <= cantidadDadosActivos; i++) {
                 const diceElement = document.getElementById(`dice-${i}`);
                 
@@ -76,18 +70,16 @@ document.getElementById('roll-btn').addEventListener('click', function() {
                 const colorFinal = colores[Math.floor(Math.random() * colores.length)];
                 diceElement.className = 'dice ' + colorFinal;
                 
-                // Sumamos al contador del juego
                 estadisticas[colorFinal]++;
                 document.getElementById(`count-${colorFinal}`).textContent = estadisticas[colorFinal];
                 
-                // Pequeño efecto de impacto visual al caer
                 diceElement.style.transform = 'scale(1.12)';
                 setTimeout(() => { diceElement.style.transform = 'scale(1)'; }, 150);
             }
 
             button.disabled = false;
             selector.disabled = false;
-            button.textContent = 'Tirar Dados';
+            button.textContent = 'Roll Dice';
         }
     }, 1000);
 });
