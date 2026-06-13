@@ -1,7 +1,6 @@
 body {
     font-family: 'Impact', 'Arial Black', sans-serif;
     background-color: #0b1a14; 
-    /* Fondo original de Toji adaptado para cubrir toda la pantalla sin repetirse */
     background-image: url('image_27b01f.png');
     background-size: cover;
     background-position: center;
@@ -15,7 +14,6 @@ body {
     color: white;
 }
 
-/* El tablero principal ahora tiene un resplandor verde neón espectacular */
 .game-container {
     text-align: center;
     background: linear-gradient(135deg, rgba(16, 38, 28, 0.95), rgba(8, 20, 15, 0.95));
@@ -41,7 +39,6 @@ h1 {
     margin-bottom: 20px;
 }
 
-/* Selector estilizado */
 .custom-select {
     background-color: #11251c;
     color: #2ecc71;
@@ -93,7 +90,6 @@ h1 {
     animation: parpadeo 0.4s infinite alternate;
 }
 
-/* Dados con súper relieve y bordes nítidos */
 .dice {
     font-size: 3.5rem; 
     width: 90px;
@@ -112,7 +108,6 @@ h1 {
     animation: giro-loco 0.25s infinite linear;
 }
 
-/* --- ILUMINACIÓN NEÓN PARA CADA COLOR --- */
 .azul { background-color: #2980b9; color: white; box-shadow: 0 0 15px rgba(41, 128, 185, 0.6); }
 .amarillo { background-color: #f1c40f; color: white; box-shadow: 0 0 15px rgba(241, 196, 15, 0.6); }
 .verde { background-color: #27ae60; color: white; box-shadow: 0 0 15px rgba(39, 174, 96, 0.6); }
@@ -120,7 +115,6 @@ h1 {
 .naranja { background-color: #d35400; color: white; box-shadow: 0 0 15px rgba(211, 84, 0, 0.6); }
 .rojo { background-color: #c0392b; color: white; box-shadow: 0 0 15px rgba(192, 57, 43, 0.6); }
 
-/* Botón con animación de pulso neón */
 button {
     background: linear-gradient(90deg, #2ecc71, #27ae60);
     color: white;
@@ -152,7 +146,6 @@ button:disabled {
     transform: none;
 }
 
-/* Estadísticas organizadas estilo interfaz gamer */
 .stats-container {
     margin-top: 25px;
     padding-top: 20px;
@@ -196,7 +189,6 @@ button:disabled {
     font-size: 1.1rem;
 }
 
-/* --- ANIMACIONES --- */
 @keyframes giro-loco {
     0% { transform: rotate(0deg) scale(1); }
     50% { transform: rotate(180deg) scale(1.1); }
