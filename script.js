@@ -5,48 +5,60 @@ document.getElementById('roll-btn').addEventListener('click', function() {
     button.disabled = true;
     button.textContent = '¡Girando!';
 
-    // 1. Activamos los textos de "ROLLING..." y la animación de rotación
+    let tiempoRestante = 3; // Ponemos los 3 segundos de sazón
+
+    // 1. Activamos la animación de giro y ponemos el texto inicial "ROLLING... 3s"
     for (let i = 1; i <= 4; i++) {
-        document.getElementById(`status-1`).classList.add('active');
-        document.getElementById(`status-2`).classList.add('active');
-        document.getElementById(`status-3`).classList.add('active');
-        document.getElementById(`status-4`).classList.add('active');
+        const statusElement = document.getElementById(`status-${i}`);
+        statusElement.textContent = `ROLLING... ${tiempoRestante}s`;
+        statusElement.classList.add('active');
         
         document.getElementById(`dice-${i}`).classList.add('spinning');
     }
 
-    // 2. Un intervalo rápido para que cambien de color frenéticamente mientras giran
+    // 2. Fiesta de colores rápida: los dados cambian de color frenéticamente cada 70ms
     const fiestaColores = setInterval(() => {
         for (let i = 1; i <= 4; i++) {
             const diceElement = document.getElementById(`dice-${i}`);
             const colorAleatorio = colores[Math.floor(Math.random() * colores.length)];
             diceElement.className = 'dice spinning ' + colorAleatorio;
         }
-    }, 70); // Cambia el color cada 70 milisegundos
+    }, 70);
 
-    // 3. DETENER TODO EXACTAMENTE A LOS 2 SEGUNDOS (2000 milisegundos)
-    setTimeout(() => {
-        clearInterval(fiestaColores); // Frena la fiesta de colores rápido
+    // 3. El contador que baja segundo a segundo (3s -> 2s -> 1s)
+    const cuentaRegresiva = setInterval(() => {
+        tiempoRestante--;
+        
+        if (tiempoRestante > 0) {
+            // Actualizamos el texto sobre cada casilla
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`status-${i}`).textContent = `ROLLING... ${tiempoRestante}s`;
+            }
+        } else {
+            // Cuando llega a 0, detenemos los motores
+            clearInterval(cuentaRegresiva);
+            clearInterval(fiestaColores);
 
-        for (let i = 1; i <= 4; i++) {
-            const diceElement = document.getElementById(`dice-${i}`);
-            
-            // Quitamos la clase de giro y el letrero de "ROLLING..."
-            diceElement.classList.remove('spinning');
-            document.getElementById(`status-${i}`).classList.remove('active');
-            
-            // Asignamos el color definitivo final
-            const colorFinal = colores[Math.floor(Math.random() * colores.length)];
-            diceElement.className = 'dice ' + colorFinal;
-            
-            // Pequeño rebote de impacto al detenerse
-            diceElement.style.transform = 'scale(1.15)';
-            setTimeout(() => { diceElement.style.transform = 'scale(1)'; }, 150);
+            // 4. Frenazo definitivo y revelación de colores
+            for (let i = 1; i <= 4; i++) {
+                const diceElement = document.getElementById(`dice-${i}`);
+                
+                // Quitamos el giro y ocultamos los cartelitos
+                diceElement.classList.remove('spinning');
+                document.getElementById(`status-${i}`).classList.remove('active');
+                
+                // Color final definitivo
+                const colorFinal = colores[Math.floor(Math.random() * colores.length)];
+                diceElement.className = 'dice ' + colorFinal;
+                
+                // Efecto de impacto al detenerse
+                diceElement.style.transform = 'scale(1.15)';
+                setTimeout(() => { diceElement.style.transform = 'scale(1)'; }, 150);
+            }
+
+            // Reactivamos el botón principal
+            button.disabled = false;
+            button.textContent = 'Tirar Dados';
         }
-
-        // Habilitamos el botón de nuevo
-        button.disabled = false;
-        button.textContent = 'Tirar Dados';
-
-    }, 2000); // 2 segundos clavados
+    }, 1000); // Se actualiza cada 1 segundo exacto
 });
