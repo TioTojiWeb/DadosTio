@@ -37,18 +37,18 @@ h1 {
 }
 
 .dice {
-    font-size: 4rem; /* Tamaño ideal para que los números queden perfectos */
+    font-size: 4rem; 
     width: 100px;
     height: 100px;
-    line-height: 100px; /* Centra el número verticalmente */
-    text-align: center; /* Centra el número horizontalmente */
+    line-height: 100px; 
+    text-align: center; 
     border-radius: 15px;
     font-weight: bold;
     transition: transform 0.1s ease, background-color 0.3s ease;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-/* Paleta con tus 6 colores listos */
+/* Paleta con tus colores */
 .azul { background-color: #3498db; color: white; }
 .amarillo { background-color: #f1c40f; color: #333; }
 .verde { background-color: #2ecc71; color: white; }
@@ -56,6 +56,7 @@ h1 {
 .naranja { background-color: #e67e22; color: white; }
 .rojo { background-color: #e74c3c; color: white; }
 
+/* Botón cuando está activo */
 button {
     background-color: #2ecc71;
     color: white;
@@ -76,4 +77,13 @@ button:hover {
 
 button:active {
     transform: scale(0.98);
+}
+
+/* El extra que añadimos: Botón cuando está bloqueado por los 3 segundos */
+button:disabled {
+    background-color: #7f8c8d !important; 
+    cursor: not-allowed; 
+    box-shadow: none !important;
+    transform: none !important;
+    opacity: 0.7;
 }
