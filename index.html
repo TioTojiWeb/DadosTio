@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juego de Dados del Toji</title>
+    <title>Toji's Dice Game</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="game-container">
-        <h1>🎲 ¡Lanza los Dados de Toji! 🎲</h1>
+        <h1>🎲 Roll Toji's Dice! 🎲</h1>
         
         <div class="selector-container">
             <select id="dice-selector" class="custom-select">
-                <option value="1">1 DADO</option>
-                <option value="2">2 DADOS</option>
-                <option value="3">3 DADOS</option>
-                <option value="4" selected>4 DADOS</option>
+                <option value="1">1 DICE</option>
+                <option value="2">2 DICE</option>
+                <option value="3">3 DICE</option>
+                <option value="4" selected>4 DICE</option>
             </select>
         </div>
         
@@ -38,17 +38,17 @@
             </div>
         </div>
 
-        <button id="roll-btn">Tirar Dados</button>
+        <button id="roll-btn">Roll Dice</button>
 
         <div class="stats-container">
-            <h3>📊 Contador de Colores</h3>
+            <h3>📊 Color Tracker</h3>
             <div class="stats-grid">
-                <div class="stat-item s-azul">Azul: <span id="count-azul">0</span></div>
-                <div class="stat-item s-amarillo">Amarillo: <span id="count-amarillo">0</span></div>
-                <div class="stat-item s-verde">Verde: <span id="count-verde">0</span></div>
-                <div class="stat-item s-morado">Morado: <span id="count-morado">0</span></div>
-                <div class="stat-item s-naranja">Naranja: <span id="count-naranja">0</span></div>
-                <div class="stat-item s-rojo">Rojo: <span id="count-rojo">0</span></div>
+                <div class="stat-item s-azul">Blue: <span id="count-azul">0</span></div>
+                <div class="stat-item s-amarillo">Yellow: <span id="count-amarillo">0</span></div>
+                <div class="stat-item s-verde">Green: <span id="count-verde">0</span></div>
+                <div class="stat-item s-morado">Purple: <span id="count-morado">0</span></div>
+                <div class="stat-item s-naranja">Orange: <span id="count-naranja">0</span></div>
+                <div class="stat-item s-rojo">Red: <span id="count-rojo">0</span></div>
             </div>
         </div>
     </div>
